@@ -5,21 +5,17 @@ from modules.book_ticket import show_movies, choose_movie, get_file_path, make_t
 def view_ticket():
     show_movies()
     movie = choose_movie()
-    path = get_file_path(movie)
-    if not os.path.exists(path):
-        print("No bookings found for this movie.")
-        return
     name = input("Enter your name: ")
-    file = open(path, "r")
-    lines = file.readlines()
-    file.close()
+    path = get_file_path(movie)
     found = False
-    for line in lines:
-        if line.strip() != "":
-            parts = line.strip().split(" | ")
-            if parts[1].lower() == name.lower():
+    if os.path.exists(path):
+        file = open(path, "r")
+        for line in file:
+            data = line.split(" | ")
+            if data[1].lower() == name.lower():
                 print("")
-                print(make_ticket(movie, parts[0], parts[1], parts[2]))
+                print(make_ticket(movie, data[0], data[1], data[2]))
                 found = True
-    if not found:
+        file.close()
+    if found == False:
         print("No ticket found for " + name + ".")

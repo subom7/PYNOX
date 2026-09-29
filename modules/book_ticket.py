@@ -63,7 +63,7 @@ def show_row(row, booked):
     for col in range(1, 10):
         seat = row + str(col)
         if seat in booked:
-            line = line + "☒ "
+            line = line + "🗷 "
         else:
             line = line + "☐ "
         if col == 2 or col == 7:
@@ -133,6 +133,32 @@ def get_email():
     return email
 
 
+def get_map_row(row, seat):
+    line = row + "   "
+    for col in range(1, 10):
+        if row + str(col) == seat:
+            line = line + "🗹 "
+        else:
+            line = line + "☐ "
+        if col == 2 or col == 7:
+            line = line + "  "
+    return line + "\n"
+
+
+def get_seat_map(seat):
+    seat_map = "    1 2   3 4 5 6 7   8 9\n"
+    seat_map = seat_map + "      RECLINERS\n"
+    for row in "KJI":
+        seat_map = seat_map + get_map_row(row, seat)
+    seat_map = seat_map + "      EXECUTIVE\n"
+    for row in "HGFED":
+        seat_map = seat_map + get_map_row(row, seat)
+    seat_map = seat_map + "      NORMAL\n"
+    for row in "CBA":
+        seat_map = seat_map + get_map_row(row, seat)
+    return seat_map
+
+
 def make_ticket(movie, seat, name, email):
     ticket = "==================================\n"
     ticket = ticket + "         MOVIE TICKET\n"
@@ -142,6 +168,8 @@ def make_ticket(movie, seat, name, email):
     ticket = ticket + "Email : " + email + "\n"
     ticket = ticket + "Seat  : " + seat + " (" + get_section(seat[0]) + ")\n"
     ticket = ticket + "Price : Rs." + str(get_price(seat[0])) + "\n"
+    ticket = ticket + "\n"
+    ticket = ticket + get_seat_map(seat)
     ticket = ticket + "==================================\n"
     return ticket
 
