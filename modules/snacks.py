@@ -25,6 +25,7 @@ def show_menu(menu):
     print("--- SNACKS MENU (prices exclude GST) ---")
     for i in range(len(menu)):
         print(str(i + 1) + ". " + item_name(menu[i]) + " - Rs." + str(item_price(menu[i])))
+    print(str(len(menu) + 1) + ". Exit")
 
 
 def show_bill(ordered):
@@ -50,25 +51,24 @@ def order_snacks():
         return
     menu = load_menu()
     ordered = []
+    exit_number = str(len(menu) + 1)
+    show_menu(menu)
     billing = False
     while billing == False:
-        show_menu(menu)
-        choice = input("Enter item number (or type exit to cancel): ")
-        if choice.lower() == "exit":
+        if len(ordered) == 0:
+            choice = input("Enter item number: ")
+        else:
+            choice = input("Enter next item number (" + exit_number + " to exit, Enter to start billing): ")
+        if choice == exit_number:
             print("Order cancelled.")
+            print("----------------------------------\n")
             return
-        if choice.isdigit() and int(choice) >= 1 and int(choice) <= len(menu):
+        if choice == "" and len(ordered) > 0:
+            billing = True
+        elif choice.isdigit() and int(choice) >= 1 and int(choice) <= len(menu):
             item = menu[int(choice) - 1]
             ordered.append(item)
             print(item_name(item) + " added.")
-            print("")
-            print("1. Order more")
-            print("2. Start billing")
-            answer = input("Enter your choice: ")
-            while answer != "1" and answer != "2":
-                answer = input("Invalid choice. Enter 1 or 2: ")
-            if answer == "2":
-                billing = True
         else:
             print("Invalid choice, try again.")
 
@@ -79,8 +79,10 @@ def order_snacks():
         seat = seat.upper()
         if seat == "CANCEL":
             print("Order cancelled.")
+            print("----------------------------------\n")
             return
         if len(seat) == 2 and get_price(seat[0]) > 0 and seat[1] in "123456789":
             print("Order confirmed! Your snacks will be delivered to seat " + seat + ".")
+            print("----------------------------------\n")
             return
         print("Invalid seat, try again.")
