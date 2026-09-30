@@ -34,7 +34,7 @@ py-nox/
 │   ├── snacks.py
 │   └── menu/
 │       └── snacks_menu.txt
-├── bookings/          (made automatically when you book the first ticket)
+├── bookings/
 └── screenshots/
 ```
 
